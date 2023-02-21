@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model file {
+  uid            String        @unique @db.VarChar(255)
+  image_URL      String?       @db.Text
+  image_Name     String?       @db.Text
+  agreement_URL  String?       @db.Text
+  agreement_Name String?       @db.Text
+  card_URL       String?       @db.Text
+  card_Name      String?       @db.Text
+  pp7_URL        String?       @db.Text
+  pp7_Name       String?       @db.Text
+  pp1_URL        String?       @db.Text
+  pp1_Name       String?       @db.Text
+  q7_URL         String?       @db.Text
+  q7_Name        String?       @db.Text
+  register_data  register_data @relation(fields: [uid], references: [uid], onUpdate: Restrict, map: "file_ibfk_1")
+
+  @@index([uid], map: "uid")
+}
+
+model question {
+  uid           String        @unique @db.VarChar(255)
+  q1            String?       @db.Text
+  q2            String?       @db.Text
+  q3            String?       @db.Text
+  q4            String?       @db.Text
+  q5            String?       @db.Text
+  q6            String?       @db.Text
+  q7            String?       @db.Text
+  register_data register_data @relation(fields: [uid], references: [uid], onUpdate: Restrict, map: "question_ibfk_1")
+
+  @@index([uid], map: "uid")
+}
+
+model register_data {
+  id                    Int       @id @default(autoincrement())
+  uid                   String?   @unique @db.VarChar(255)
+  consent               Boolean   @default(false)
+  page                  Int?      @default(0)
+  prefix                String?   @db.VarChar(50)
+  firstname             String?   @db.VarChar(50)
+  middlename            String?   @db.VarChar(50)
+  surname               String?   @db.VarChar(50)
+  nickname              String?   @db.VarChar(50)
+  birth_date            String?   @db.VarChar(20)
+  mobile                String?   @db.VarChar(20)
+  email                 String?   @db.VarChar(50)
+  province              String?   @db.VarChar(255)
+  travelby              String?   @db.VarChar(255)
+  shirt_size            String?   @db.VarChar(10)
+  medicine              String?   @db.VarChar(255)
+  underlying            String?   @db.VarChar(255)
+  allergic_food         String?   @db.VarChar(255)
+  allergic_medicine     String?   @db.VarChar(255)
+  special               String?   @db.VarChar(255)
+  notebook              Boolean?
+  school_name           String?   @db.Text
+  school_province       String?   @db.VarChar(255)
+  study_plan            String?   @db.VarChar(255)
+  student_level         String?   @db.VarChar(255)
+  gpax                  String?   @db.VarChar(10)
+  university_1          String?   @db.Text
+  faculty_1             String?   @db.Text
+  major_1               String?   @db.Text
+  university_2          String?   @db.Text
+  faculty_2             String?   @db.Text
+  major_2               String?   @db.Text
+  university_3          String?   @db.Text
+  faculty_3             String?   @db.Text
+  major_3               String?   @db.Text
+  comcamp_previous      Boolean?  @default(false)
+  major_interest        String?   @db.Text
+  reason_major_interest String?   @db.Text
+  camp_1                String?   @db.Text
+  camp_2                String?   @db.Text
+  camp1_by              String?   @db.Text
+  camp2_by              String?   @db.Text
+  no_previous_camp      Boolean?  @default(false)
+  parent_prefix         String?   @db.VarChar(50)
+  parent_firstname      String?   @db.VarChar(50)
+  parent_middlename     String?   @db.VarChar(50)
+  parent_surname        String?   @db.VarChar(50)
+  parent_relation       String?   @db.VarChar(50)
+  parent_mobile         String?   @db.VarChar(20)
+  parent_email          String?   @db.VarChar(48)
+  same_parent           Boolean?  @default(false)
+  emergency_prefix      String?   @db.VarChar(50)
+  emergency_firstname   String?   @db.VarChar(50)
+  emergency_middlename  String?   @db.VarChar(50)
+  emergency_surname     String?   @db.VarChar(50)
+  emergency_relation    String?   @db.VarChar(50)
+  emergency_mobile      String?   @db.VarChar(20)
+  emergency_email       String?   @db.VarChar(48)
+  is_completed          Boolean?  @default(false)
+  submited_at           DateTime?
+  file                  file?
+  question              question?
+}
