@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import admin from "firebase-admin";
 import helmet from "helmet";
 import cors from "cors";
 
@@ -8,6 +9,11 @@ const port = process.env.PORT || 8080;
 
 app.use(helmet());
 app.use(cors());
+
+// Initial Firebase Admin
+admin.initializeApp({
+  credential: admin.credential.cert("firebase-secret.json"),
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express TypeScript Server is Running");

@@ -7,13 +7,45 @@ export const testUser = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    // idToken from headers
     const idToken = req.headers["id-token"] as string;
     if (!idToken) {
       res.status(403).send("No id-token Provide");
     }
-    // Validate ID Token and Return UID
-    const token = await userService.generateToken(idToken);
-    res.status(200).send({ success: true, token: token });
-  } catch (error) {}
+
+    const uid = await userService.validateIDToken(idToken);
+
+    const user = await userService.getUserByUid(uid);
+
+    // Create User
+    if (!user) {
+      const token = userService.generateToken(uid);
+      await userService.createUser(uid);
+      res.status(201).send({
+        success: true,
+        message: "User Created",
+        page: 0,
+        accessToken: token,
+      });
+    }
+    if (user) {
+      // Check Form Submitted
+      if (user.is_completed == true) {
+        res
+          .status(208)
+          .send({ success: false, message: "User Already Submitted Form" });
+      } else {
+        const token = userService.generateToken(uid);
+        const page = await userService.getPage(uid);
+        res.status(200).send({
+          success: true,
+          message: "Authenthicated",
+          page: page,
+          accessToken: token,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false, message: error });
+  }
 };
