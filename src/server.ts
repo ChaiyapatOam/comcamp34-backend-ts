@@ -1,8 +1,13 @@
 import express, { Express, Request, Response } from "express";
-import { indexRouter } from "@/routes";
+import helmet from "helmet";
+import cors from "cors";
 
+import { indexRouter } from "@/routes";
 const app: Express = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
+
+app.use(helmet());
+app.use(cors());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express TypeScript Server is Running");
