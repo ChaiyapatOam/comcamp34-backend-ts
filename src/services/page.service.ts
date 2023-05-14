@@ -1,5 +1,5 @@
 import { User } from "@/lib/prisma";
-const { Webhook } = require("discord-webhook-node");
+import { Webhook } from "discord-webhook-node";
 import {
   Education,
   Interest,
